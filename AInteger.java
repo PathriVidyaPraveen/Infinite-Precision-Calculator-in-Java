@@ -234,13 +234,76 @@ public class AInteger{
     return new AInteger("0");
     
     }
+
+    public static AInteger multiply(AInteger s1,AInteger s2){
+        if(s1.sign=='+' && s2.sign=='-'){
+            AInteger s2_mod = new AInteger(s2.s);
+            AInteger result = multiply(s1,s2_mod);
+            result.sign='-';
+            return result;
+        }else if(s1.sign=='-' && s2.sign=='+'){
+            AInteger s1_mod = new AInteger(s1.s);
+            AInteger result = multiply(s1_mod,s2);
+            result.sign='-';
+            return result;
+        }else if(s1.sign=='-' && s2.sign=='-'){
+            AInteger s1_mod = new AInteger(s1.s);
+            AInteger s2_mod = new AInteger(s2.s);
+            AInteger result = multiply(s1_mod,s2_mod);
+            result.sign='+';
+            return result;
+        }
+        String a = s1.s;
+        String b = s2.s;
+        int begin_substr = 0;
+    for(;begin_substr<a.length();begin_substr++){
+        if(a.charAt(begin_substr) != '0'){
+            break;
+        }
+    }
+    a = a.substring(begin_substr);
+    begin_substr=0;
+    for(;begin_substr<b.length();begin_substr++){
+        if(b.charAt(begin_substr) != '0'){
+            break;
+        }
+    }
+    b = b.substring(begin_substr);
+    if(a.equals("") || b.equals("")){
+        return new AInteger("0");
+    }
+    int len_b = b.length();
+    int len_a = a.length();
     
+    AInteger result = new AInteger("0");
+    // String[] str_to_be_added = new String[len_b];
+    for(int i=0;i<len_b;i++){
+        int multiply_digit = (int)(b.charAt(len_b-1-i)) - 48;
+        AInteger str = new AInteger("0");
+        for(int j=0;j<multiply_digit;j++){
+            str = AInteger.add(str,new AInteger(a));
+        }
+        //str_to_be_added[i] = str;
+        String string = str.s;
+        for(int k=0;k<i;k++){
+            string += "0";
+        }
+        AInteger added_string = new AInteger(string);
+        result = AInteger.add(result,added_string);
+    }
+
+
+    result.sign = '+';
+    return result;
+        
+    }
+
     public static void main(String[] args){
-        AInteger num1 = new AInteger("3116511674006599806495512758577");
-        AInteger num2 = new AInteger("57745242300346381144446453884008");
-        AInteger num = AInteger.subtract(num1,num2);
+        AInteger num1 = new AInteger("14344163160445929942680697312322");
+        AInteger num2 = new AInteger("23017167694823904478474013730519");
+        AInteger num = AInteger.multiply(num1,num2);
         String number = num.s;
-        System.out.println(num.sign+number);
+        System.out.println(number);
 
     }
 
