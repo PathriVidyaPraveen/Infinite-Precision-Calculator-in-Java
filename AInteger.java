@@ -43,19 +43,34 @@ public class AInteger{
     public static AInteger add(AInteger s1, AInteger s2){
         if(s1.sign=='+' && s2.sign=='-'){
             AInteger s2_mod = new AInteger(s2.s);
-           // return subtract(s1 , s2_mod);
+           return subtract(s1 , s2_mod);
         }else if(s1.sign=='-' && s2.sign=='+'){
             AInteger s1_mod = new AInteger(s1.s);
-            //return subtract(s2,s1_mod);
+            return subtract(s2,s1_mod);
         }else if(s1.sign=='-' && s2.sign=='-'){
             AInteger s1_mod = new AInteger(s1.s);
             AInteger s2_mod = new AInteger(s2.s);
-            AInteger result = AInteger.add(s1_mod,s2_mod);
-            
-            return new AInteger("-"+result.s);
+            AInteger result = AInteger.add(s1_mod, s2_mod);
+            result.sign = '-';
+            return result;
+
         }
     String a = s1.s;
     String b = s2.s;
+    int begin_substr = 0;
+    for(;begin_substr<a.length();begin_substr++){
+        if(a.charAt(begin_substr) != '0'){
+            break;
+        }
+    }
+    a = a.substring(begin_substr);
+    begin_substr=0;
+    for(;begin_substr<b.length();begin_substr++){
+        if(b.charAt(begin_substr) != '0'){
+            break;
+        }
+    }
+    b = b.substring(begin_substr);
     int len_a = a.length();
     int len_b = b.length();
 
@@ -108,14 +123,122 @@ public class AInteger{
 
     
     }
+    public static boolean compare(String a,String b){
+        if(a.length() > b.length()){
+            return true;
+        }
+        if(b.length() > a.length()){
+            return false;
+        }
+        int n = a.length();
+        
+        for(int i=0;i<n;i++){
+            int digit1 = (int)(a.charAt(i)) - 48;
+            int digit2 = (int)(b.charAt(i)) - 48;
+            if(digit1 > digit2){
+                return true;
+            }else if(digit1 < digit2){
+                return false;
+            }
+        }
+        return false;
+        // returns true if a is greater than b and false otherwise
+    }
+    public static String string_subtract(String a,String b){
+        // a is always greater than b
+        int carry = 0;
+        int n= a.length();
+        int diff = a.length() - b.length();
+        for(int i=0;i<diff;i++){
+            b = "0"+b;
+        }
+        String result = "";
+        for(int i=n-1;i>=0;i--){
+            int digit1 = (int)(a.charAt(i)) - 48;
+            int digit2 = (int)(b.charAt(i)) - 48;
+            int digit = digit1+carry - digit2;
+            if(digit < 0){
+                char digit_char = (char)(digit+10+48);
+                result = digit_char + result;
+                carry = -1;
+            }else{
+                char digit_char = (char)(digit+48);
+                result = digit_char + result;
+                carry = 0;
+            }
+
+        }
+        return result;
+
+    }
 
     public static AInteger subtract(AInteger s1,AInteger s2){
-        
+        if(s1.sign=='+' && s2.sign=='-'){
+            AInteger s2_mod = new AInteger(s2.s);
+            AInteger result = AInteger.add(s1,s2_mod);
+            return result;
+        }else if(s1.sign=='-' && s2.sign=='+'){
+            AInteger s1_mod = new AInteger(s1.s);
+            AInteger s2_mod = new AInteger(s2.s);
+            AInteger result = AInteger.add(s1_mod,s2_mod);
+            result.sign = '-';
+            return result;
+        }else if(s1.sign=='-' && s2.sign=='-'){
+            AInteger s2_mod = new AInteger(s2.s);
+            AInteger s1_mod = new AInteger(s1.s);
+            return AInteger.subtract(s2_mod,s1_mod);
+        }
+    String a = s1.s;
+    String b = s2.s;
+    int begin_substr = 0;
+    for(;begin_substr<a.length();begin_substr++){
+        if(a.charAt(begin_substr) != '0'){
+            break;
+        }
     }
+    a = a.substring(begin_substr);
+    begin_substr=0;
+    for(;begin_substr<b.length();begin_substr++){
+        if(b.charAt(begin_substr) != '0'){
+            break;
+        }
+    }
+    b = b.substring(begin_substr);
+    if(b.equals(a)){
+        return new AInteger("0");
+    }
+    if(b.length()< a.length() ){
+        String result = string_subtract(a,b);
+        AInteger result_obj = new AInteger(result);
+        result_obj.sign = '+';
+        return result_obj;
+    }
+    if(a.length() < b.length() ){
+        String result = string_subtract(b,a);
+        AInteger result_obj = new AInteger(result);
+        result_obj.sign = '-';
+        return result_obj;
+    }
+    if(compare(a,b)){
+         String result = string_subtract(a,b);
+        AInteger result_obj = new AInteger(result);
+        result_obj.sign = '+';
+        return result_obj;
+    }
+    if(compare(b,a)){
+        String result = string_subtract(b,a);
+        AInteger result_obj = new AInteger(result);
+        result_obj.sign = '-';
+        return result_obj;
+    }
+    return new AInteger("0");
+    
+    }
+    
     public static void main(String[] args){
-        AInteger num1 = new AInteger("-00788");
-        AInteger num2 = new AInteger("-0112");
-        AInteger num = AInteger.add(num1,num2);
+        AInteger num1 = new AInteger("3116511674006599806495512758577");
+        AInteger num2 = new AInteger("57745242300346381144446453884008");
+        AInteger num = AInteger.subtract(num1,num2);
         String number = num.s;
         System.out.println(num.sign+number);
 
