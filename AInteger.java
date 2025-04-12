@@ -7,30 +7,53 @@ public class AInteger{
     // Default constructor that initializes the value of string with 0 initially.
     public AInteger(){
         this.s = "0";
+        this.sign = '+';
         
     }
     // Constructor that initializes the instance of a number as a string with passed argument
     public AInteger(String s){
-        this.s = s;
+            
         if (s == null || s.isEmpty()){
             throw new IllegalArgumentException("Invalid Input!!");
         }
+        if(s.charAt(0)=='+' || s.charAt(0)== '-'){
+            this.sign = s.charAt(0);
+            s = s.substring(1);
+        }else if(Character.isDigit(s.charAt(0))){
+            this.sign = '+';
+        }
+        
+    
     for (char c : s.toCharArray()) {
         if (!Character.isDigit(c)){
             throw new IllegalArgumentException("Invalid Input!!");
         }
     }
-        
+       this.s = s; 
     }
     // Copy constructor that creates an instance of AInteger
     public AInteger(AInteger other_copy){
         this.s = other_copy.s;
+        this.sign = other_copy.sign;
     }
     // Static function that returns an instance of AInteger class
     public static AInteger parse(String s){
         return new AInteger(s);
     }
     public static AInteger add(AInteger s1, AInteger s2){
+        if(s1.sign=='+' && s2.sign=='-'){
+            AInteger s2_mod = new AInteger(s2.s);
+           // return subtract(s1 , s2_mod);
+        }else if(s1.sign=='-' && s2.sign=='+'){
+            AInteger s1_mod = new AInteger(s1.s);
+            //return subtract(s2,s1_mod);
+        }else if(s1.sign=='-' && s2.sign=='-'){
+            AInteger s1_mod = new AInteger(s1.s);
+            AInteger s2_mod = new AInteger(s2.s);
+            AInteger result = AInteger.add(s1_mod,s2_mod);
+            
+            return new AInteger("-"+result.s);
+        }
     String a = s1.s;
     String b = s2.s;
     int len_a = a.length();
@@ -85,12 +108,16 @@ public class AInteger{
 
     
     }
+
+    public static AInteger subtract(AInteger s1,AInteger s2){
+        
+    }
     public static void main(String[] args){
-        AInteger num1 = new AInteger("00w8");
-        AInteger num2 = new AInteger("0112");
+        AInteger num1 = new AInteger("-00788");
+        AInteger num2 = new AInteger("-0112");
         AInteger num = AInteger.add(num1,num2);
         String number = num.s;
-        System.out.println(number);
+        System.out.println(num.sign+number);
 
     }
 
