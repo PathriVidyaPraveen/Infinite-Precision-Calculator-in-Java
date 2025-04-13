@@ -1,0 +1,7 @@
+* c879a66 (HEAD -> main, tag: v1.0, origin/main) Implemented division for AInteger class
+* 0d9fb7b Implemented integer multiplication
+* b6bcd40 Implemeted addition and subtraction operations
+* 799346f Handled all possible sign permutations of additions , subtraction need to be written
+* 8e053b2 Integer addition method added for non negative numbers
+* aacc3c1 Implemented constructors for AInteger class
+* 735f484 Initial commit
