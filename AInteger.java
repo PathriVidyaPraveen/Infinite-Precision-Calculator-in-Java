@@ -297,11 +297,102 @@ public class AInteger{
     return result;
         
     }
+    public static class DivisionByZeroException extends ArithmeticException{
+        public DivisionByZeroException(){
+            super("Division by zero is not allowed.");
+        }
+        public DivisionByZeroException(String message){
+            super(message);
+        }
+    }
+
+
+    public static AInteger divide(AInteger s1,AInteger s2){
+        if(s1.sign=='-' && s2.sign=='+'){
+            AInteger s1_mod = new AInteger(s1.s);
+            AInteger result = divide(s1_mod,s2);
+            result.sign = '-';
+            return result;
+        }else if(s1.sign=='+' && s2.sign=='-'){
+            AInteger s2_mod = new AInteger(s2.s);
+            AInteger result = divide(s1,s2_mod);
+            result.sign = '+';
+            return result;
+        }else if(s1.sign=='-' && s2.sign=='-'){
+            AInteger s1_mod = new AInteger(s1.s);
+            AInteger s2_mod = new AInteger(s2.s);
+            AInteger result = divide(s1_mod,s2_mod);
+            result.sign = '+';
+            return result;
+        }
+        String a = s1.s;
+        String b = s2.s;
+        int begin_substr = 0;
+        for(;begin_substr<a.length();begin_substr++){
+            if(a.charAt(begin_substr) != '0'){
+                break;
+            }
+        }
+        a = a.substring(begin_substr);
+        begin_substr = 0;
+        for(;begin_substr < b.length();begin_substr++){
+            if(b.charAt(begin_substr) != '0'){
+                break;
+            }
+        }
+        b = b.substring(begin_substr);
+        if(b.equals("")){
+            throw new DivisionByZeroException("Invalid !! Division by zero is not possible. Terminating...");
+
+        }
+        if(a.equals("")){
+            return new AInteger("0");
+
+        }
+        if(a.equals(b)){
+            return new AInteger("1");
+        }
+        
+        AInteger remainder = new AInteger("0");
+        String quotient = "";
+        for(int i=0;i<a.length();i++){
+            remainder = new AInteger(remainder.s.equals("0") ? "" + a.charAt(i) : remainder.s + a.charAt(i));
+
+            int digit = 0;
+            while(!compare(AInteger.multiply(new AInteger(b),new AInteger(String.valueOf(digit+1))).s , remainder.s)){
+                digit++;
+            }
+            quotient += String.valueOf(digit);
+            AInteger subtracted = AInteger.multiply(new AInteger(b),new AInteger(String.valueOf(digit)));
+            remainder = AInteger.subtract(remainder,subtracted);
+        
+        if (!remainder.s.equals("0")) {
+                int rem_start = 0;
+                while (rem_start < remainder.s.length() - 1 && remainder.s.charAt(rem_start) == '0') {
+                    rem_start++;
+                }
+                remainder.s = remainder.s.substring(rem_start);
+            }
+        }
+        begin_substr = 0;
+        for(;begin_substr<quotient.length();begin_substr++){
+            if(quotient.charAt(begin_substr) != '0'){
+                break;
+            }
+        }
+        quotient = quotient.substring(begin_substr);
+        if(quotient.equals("")){
+            quotient = "0";
+        }
+        AInteger result = new AInteger(quotient);
+        return result;
+}
+   
 
     public static void main(String[] args){
-        AInteger num1 = new AInteger("14344163160445929942680697312322");
-        AInteger num2 = new AInteger("23017167694823904478474013730519");
-        AInteger num = AInteger.multiply(num1,num2);
+        AInteger num1 = new AInteger("8792726365283060579833950521677211");
+        AInteger num2 = new AInteger("493835253617089647454998358");
+        AInteger num = AInteger.divide(num1,num2);
         String number = num.s;
         System.out.println(number);
 
