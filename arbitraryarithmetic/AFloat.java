@@ -1,0 +1,165 @@
+package arbitraryarithmetic;
+
+public class AFloat{
+    public String s;
+    public char sign;
+    public AFloat(){
+        this.s = "0.0";
+        this.sign = '+';
+    }
+    public AFloat(String s){
+     
+        if (s == null || s.isEmpty()){
+            throw new IllegalArgumentException("Invalid Input!!");
+        }
+        if(s.charAt(0)=='+' || s.charAt(0)== '-'){
+            this.sign = s.charAt(0);
+            s = s.substring(1);
+        }else if(Character.isDigit(s.charAt(0))){
+            this.sign = '+';
+        }
+        
+    int decimal_count = 0;
+    for (char c : s.toCharArray()) {
+        if (!(Character.isDigit(c)) && decimal_count >= 1){
+            throw new IllegalArgumentException("Invalid Input!!");
+        }
+        if(c=='.'){
+            decimal_count ++;
+        }
+    }
+       this.s = s; 
+    }
+    public AFloat(AFloat other_copy){
+        this.s = other_copy.s;
+        this.sign = other_copy.sign;
+    }
+    public static AFloat parse(String s){
+        return new AFloat(s);
+    }
+    private static AFloat int_to_float(String s){
+        if (!s.contains(".")) {
+        s += ".0";
+        }
+        if (s.startsWith(".")) {
+            s = "0" + s;
+        }
+        if (s.endsWith(".")) {
+        s = s + "0";
+        }
+
+        return parse(s);
+    }
+    private static String pad_left_zeroes(String s,int n){
+        for(int i=0;i<n;i++){
+            s = "0"+s;
+        }
+        return s;
+
+    }
+    private static String pad_right_zeroes(String s,int n){
+        for(int i=0;i<n;i++){
+            s = s+"0";
+
+        }
+        return s;
+
+    }
+
+    public static AFloat add(AFloat s1, AFloat s2){
+        if(s1.sign=='+' && s2.sign=='-'){
+            AFloat s2_mod = new AFloat(s2.s);
+           // AFloat result = subtract(s1,s2_mod);
+            //return result;
+        }else if(s1.sign=='-' && s2.sign=='+'){
+           // AFloat s1_mod = new AFloat(s1.s);
+            //return subtract(s2,s1_mod);
+        }else if(s1.sign=='-' && s2.sign=='-'){
+            AFloat s1_mod = new AFloat(s1.s);
+            AFloat s2_mod = new AFloat(s2.s);
+            AFloat result = AFloat.add(s1_mod, s2_mod);
+            result.sign = '-';
+            return result;
+
+        }
+        String a = s1.s;
+        String b = s2.s;
+        int a_decimal_place = 0;
+        int b_decimal_place = 0;
+        for(;a_decimal_place < a.length();a_decimal_place++){
+            if(a.charAt(a_decimal_place) == '.'){
+                break;
+            }
+        }
+        for(;b_decimal_place < b.length();b_decimal_place++){
+            if(b.charAt(b_decimal_place) == '.'){
+                break;
+            }
+        }
+        // Number always has exactly one decimal digit
+        int num_decimals_a = a.substring(a_decimal_place+1).length();
+        int num_decimals_b = b.substring(b_decimal_place+1).length();
+        int num_digits_a = a.substring(0,a_decimal_place).length();
+        int num_digits_b = b.substring(0,b_decimal_place).length();
+        // Pad left zeroes and right zeroes to make equal length strings for addition
+        if(num_digits_a < num_digits_b){
+            int diff = num_digits_b - num_digits_a;
+            a = pad_left_zeroes(a,diff);
+        }else{
+            int diff = num_digits_a - num_digits_b;
+            b = pad_left_zeroes(b,diff);
+        }
+
+        if(num_decimals_a < num_decimals_b){
+            int diff = num_decimals_b - num_decimals_a;
+            a = pad_right_zeroes(a,diff);
+        }else{
+            int diff = num_decimals_a - num_decimals_b;
+            b = pad_right_zeroes(b,diff);
+        }
+        // Again make them into integers
+        a_decimal_place = 0;
+        b_decimal_place = 0;
+        for(;a_decimal_place < a.length();a_decimal_place++){
+            if(a.charAt(a_decimal_place) == '.'){
+                break;
+            }
+        }
+        for(;b_decimal_place < b.length();b_decimal_place++){
+            if(b.charAt(b_decimal_place) == '.'){
+                break;
+            }
+        }
+        String a_int = a.substring(0,a_decimal_place) + a.substring(a_decimal_place+1);
+        String b_int = b.substring(0,b_decimal_place) + b.substring(b_decimal_place+1);
+        int decimal_length = a.substring(a_decimal_place+1).length();
+        AInteger a_integer = new AInteger(a_int);
+        AInteger b_integer = new AInteger(b_int);
+        AInteger sum = AInteger.add(a_integer,b_integer);
+        String result = sum.s;
+        int len = result.length();
+        int digit_len = len - decimal_length;
+        result = result.substring(0,digit_len) + "."+result.substring(digit_len);
+        AFloat result_float = new AFloat(result);
+        return result_float;
+        
+
+
+    }
+    // public static AFloat subtract(AFloat s1, AFloat s2){
+
+    // }
+    // public static AFloat multiply(AFloat s1, AFloat s2){
+
+    // }
+    // public static AFloat divide(AFloat s1, AFloat s2){
+
+    // }
+    public static void main(String[] args){
+        AFloat num1 = new AFloat("84486723.420039");
+        AFloat num2 = new AFloat("70974199.843732");
+        AFloat num = AFloat.add(num1,num2);
+        System.out.println(num.s);
+
+    }
+}
