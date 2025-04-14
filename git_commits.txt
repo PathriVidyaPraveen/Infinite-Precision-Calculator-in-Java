@@ -1,4 +1,10 @@
-* c879a66 (HEAD -> main, tag: v1.0, origin/main) Implemented division for AInteger class
+* d2c0cca (HEAD -> main, origin/main) Implemented Float Division. Completed all the necessary operations for AInteger and AFloat classes
+* 1857902 Implemented float multiplication
+* 7f40b8a Implemented AFloat subtraction
+* 53df894 Packaged AInteger and AFloat into arbitraryarithmetic and also implemented AFloat addition
+* 8a9700c Implemented constructors for AFloat class
+* 857e252 Added git_commits.txt file that represents a snapshot of git commits
+* c879a66 (tag: v1.0) Implemented division for AInteger class
 * 0d9fb7b Implemented integer multiplication
 * b6bcd40 Implemeted addition and subtraction operations
 * 799346f Handled all possible sign permutations of additions , subtraction need to be written
