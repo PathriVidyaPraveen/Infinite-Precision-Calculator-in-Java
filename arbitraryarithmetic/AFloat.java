@@ -218,9 +218,9 @@ public class AFloat{
         int decimal_length = a.substring(a_decimal_place+1).length();
         AInteger a_integer = new AInteger(a_int);
         AInteger b_integer = new AInteger(b_int);
-        AInteger sum = AInteger.subtract(a_integer,b_integer);
-        String result = sum.s;
-        char result_sign = sum.sign;
+        AInteger difference = AInteger.subtract(a_integer,b_integer);
+        String result = difference.s;
+        char result_sign = difference.sign;
         int len = result.length();
         int digit_len = len - decimal_length;
         result = result.substring(0,digit_len) + "."+result.substring(digit_len);
@@ -231,16 +231,92 @@ public class AFloat{
 
 
     }
-    // public static AFloat multiply(AFloat s1, AFloat s2){
+    private static String remove_excess_zeroes_on_right(String str){
+        boolean first_non_zero_decimal_digit_found = false;
+        int len = str.length();
+        int num_excess_zeroes_on_right = 0;
+        for(int i=len-1;i>=0;i--){
+            char digit = str.charAt(i);
+            if(digit != '0'){
+                first_non_zero_decimal_digit_found = true;
+                break;
+            }else{
+                num_excess_zeroes_on_right ++;
 
-    // }
+            }
+        }
+        String processed_str = str.substring(0,len-num_excess_zeroes_on_right);
+        return processed_str;
+    }
+    public static AFloat multiply(AFloat s1, AFloat s2){
+        if(s1.sign == '-' && s2.sign == '+'){
+            AFloat s1_mod = new AFloat(s1.s);
+            AFloat result = AFloat.multiply(s1_mod,s2);
+            result.sign = '-';
+            return result;
+        }else if(s1.sign == '+' && s2.sign == '-'){
+            AFloat s2_mod = new AFloat(s2.s);
+            AFloat result = AFloat.multiply(s1,s2_mod);
+            result.sign = '-';
+            return result;
+        }else if(s1.sign == '-' && s2.sign == '-'){
+            AFloat s1_mod = new AFloat(s1.s);
+            AFloat s2_mod = new AFloat(s2.s);
+            AFloat result = AFloat.multiply(s1_mod,s2_mod);
+            result.sign = '+';
+            return result;
+        }
+        String a = s1.s;
+        String b = s2.s;
+        int a_decimal_place = 0;
+        int b_decimal_place = 0;
+        for(;a_decimal_place < a.length();a_decimal_place++){
+            if(a.charAt(a_decimal_place) == '.'){
+                break;
+            }
+        }
+        for(;b_decimal_place < b.length();b_decimal_place++){
+            if(b.charAt(b_decimal_place) == '.'){
+                break;
+            }
+        }
+        // Number always has exactly one decimal digit
+        int num_decimals_a = a.substring(a_decimal_place+1).length();
+        int num_decimals_b = b.substring(b_decimal_place+1).length();
+        int decimal_length = num_decimals_a + num_decimals_b;
+        // Pad left zeroes and right zeroes to make equal length strings for addition
+        
+        // Again make them into integers
+        
+        String a_int = a.substring(0,a_decimal_place) + a.substring(a_decimal_place+1);
+        String b_int = b.substring(0,b_decimal_place) + b.substring(b_decimal_place+1);
+        
+        AInteger a_integer = new AInteger(a_int);
+        AInteger b_integer = new AInteger(b_int);
+        AInteger product = AInteger.multiply(a_integer,b_integer);
+        String result = product.s;
+        
+        int len = result.length();
+        int digit_len = len - decimal_length;
+        result = result.substring(0,digit_len) + "."+result.substring(digit_len);
+        result = remove_excess_zeroes_on_right(result);
+        result = int_to_float(result).s;
+        AFloat result_float = new AFloat(result);
+        
+        return result_float;
+        
+
+
+
+
+    }
     // public static AFloat divide(AFloat s1, AFloat s2){
 
     // }
     public static void main(String[] args){
-        AFloat num1 = new AFloat("840196454.51725");
-        AFloat num2 = new AFloat("712586963.70283");
-        AFloat num = AFloat.subtract(num1,num2);
+        AFloat num1 = new AFloat("6400251.9377695");
+        AFloat num2 = new AFloat("2326541.6827934");
+        AFloat num = AFloat.multiply(num1,num2);
         System.out.println(num.s);
 
     }
