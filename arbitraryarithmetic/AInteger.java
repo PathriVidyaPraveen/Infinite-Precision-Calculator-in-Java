@@ -14,7 +14,7 @@ public class AInteger{
     }
     // Constructor that initializes the instance of a number as a string with passed argument
     public AInteger(String s){
-            
+         try{
         if (s == null || s.isEmpty()){
             throw new IllegalArgumentException("Invalid Input!!");
         }
@@ -32,6 +32,10 @@ public class AInteger{
         }
     }
        this.s = s; 
+         }catch(IllegalArgumentException e){
+            System.out.println(e.getMessage());
+            System.exit(0);
+         }
     }
     // Copy constructor that creates an instance of AInteger
     public AInteger(AInteger other_copy){
@@ -343,9 +347,14 @@ public class AInteger{
             }
         }
         b = b.substring(begin_substr);
+        try{
         if(b.equals("")){
-            throw new DivisionByZeroException("Invalid !! Division by zero is not possible. Terminating...");
+            throw new DivisionByZeroException("Division be zero error");
 
+        }
+        }catch(DivisionByZeroException e){
+            System.out.println(e.getMessage());
+            System.exit(0);
         }
         if(a.equals("")){
             return new AInteger("0");
@@ -393,7 +402,7 @@ public class AInteger{
 
     public static void main(String[] args){
         AInteger num1 = new AInteger("8792726365283060579833950521677211");
-        AInteger num2 = new AInteger("493835253617089647454998358");
+        AInteger num2 = new AInteger("0");
         AInteger num = AInteger.divide(num1,num2);
         String number = num.s;
         System.out.println(number);
