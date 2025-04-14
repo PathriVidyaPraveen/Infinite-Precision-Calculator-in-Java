@@ -69,11 +69,11 @@ public class AFloat{
     public static AFloat add(AFloat s1, AFloat s2){
         if(s1.sign=='+' && s2.sign=='-'){
             AFloat s2_mod = new AFloat(s2.s);
-           // AFloat result = subtract(s1,s2_mod);
-            //return result;
+           AFloat result = subtract(s1,s2_mod);
+            return result;
         }else if(s1.sign=='-' && s2.sign=='+'){
-           // AFloat s1_mod = new AFloat(s1.s);
-            //return subtract(s2,s1_mod);
+           AFloat s1_mod = new AFloat(s1.s);
+            return subtract(s2,s1_mod);
         }else if(s1.sign=='-' && s2.sign=='-'){
             AFloat s1_mod = new AFloat(s1.s);
             AFloat s2_mod = new AFloat(s2.s);
@@ -146,9 +146,91 @@ public class AFloat{
 
 
     }
-    // public static AFloat subtract(AFloat s1, AFloat s2){
+    public static AFloat subtract(AFloat s1, AFloat s2){
+        if(s1.sign=='+' && s2.sign=='-'){
+            AFloat s2_mod = new AFloat(s2.s);
+           AFloat result = add(s1,s2_mod);
+            return result;
+        }else if(s1.sign=='-' && s2.sign=='+'){
+           AFloat s1_mod = new AFloat(s1.s);
+           AFloat result = add(s1_mod,s2);
+           result.sign = '-';
+           return result;
+        }else if(s1.sign=='-' && s2.sign=='-'){
+            AFloat s1_mod = new AFloat(s1.s);
+            AFloat s2_mod = new AFloat(s2.s);
+            AFloat result = subtract(s2_mod,s1_mod);
+            
+            return result;
 
-    // }
+        }
+        
+        String a = s1.s;
+        String b = s2.s;
+        int a_decimal_place = 0;
+        int b_decimal_place = 0;
+        for(;a_decimal_place < a.length();a_decimal_place++){
+            if(a.charAt(a_decimal_place) == '.'){
+                break;
+            }
+        }
+        for(;b_decimal_place < b.length();b_decimal_place++){
+            if(b.charAt(b_decimal_place) == '.'){
+                break;
+            }
+        }
+        // Number always has exactly one decimal digit
+        int num_decimals_a = a.substring(a_decimal_place+1).length();
+        int num_decimals_b = b.substring(b_decimal_place+1).length();
+        int num_digits_a = a.substring(0,a_decimal_place).length();
+        int num_digits_b = b.substring(0,b_decimal_place).length();
+        // Pad left zeroes and right zeroes to make equal length strings for addition
+        if(num_digits_a < num_digits_b){
+            int diff = num_digits_b - num_digits_a;
+            a = pad_left_zeroes(a,diff);
+        }else{
+            int diff = num_digits_a - num_digits_b;
+            b = pad_left_zeroes(b,diff);
+        }
+
+        if(num_decimals_a < num_decimals_b){
+            int diff = num_decimals_b - num_decimals_a;
+            a = pad_right_zeroes(a,diff);
+        }else{
+            int diff = num_decimals_a - num_decimals_b;
+            b = pad_right_zeroes(b,diff);
+        }
+        // Again make them into integers
+        a_decimal_place = 0;
+        b_decimal_place = 0;
+        for(;a_decimal_place < a.length();a_decimal_place++){
+            if(a.charAt(a_decimal_place) == '.'){
+                break;
+            }
+        }
+        for(;b_decimal_place < b.length();b_decimal_place++){
+            if(b.charAt(b_decimal_place) == '.'){
+                break;
+            }
+        }
+        String a_int = a.substring(0,a_decimal_place) + a.substring(a_decimal_place+1);
+        String b_int = b.substring(0,b_decimal_place) + b.substring(b_decimal_place+1);
+        int decimal_length = a.substring(a_decimal_place+1).length();
+        AInteger a_integer = new AInteger(a_int);
+        AInteger b_integer = new AInteger(b_int);
+        AInteger sum = AInteger.subtract(a_integer,b_integer);
+        String result = sum.s;
+        char result_sign = sum.sign;
+        int len = result.length();
+        int digit_len = len - decimal_length;
+        result = result.substring(0,digit_len) + "."+result.substring(digit_len);
+        AFloat result_float = new AFloat(result);
+        result_float.sign = result_sign;
+        return result_float;
+        
+
+
+    }
     // public static AFloat multiply(AFloat s1, AFloat s2){
 
     // }
@@ -156,9 +238,9 @@ public class AFloat{
 
     // }
     public static void main(String[] args){
-        AFloat num1 = new AFloat("84486723.420039");
-        AFloat num2 = new AFloat("70974199.843732");
-        AFloat num = AFloat.add(num1,num2);
+        AFloat num1 = new AFloat("840196454.51725");
+        AFloat num2 = new AFloat("712586963.70283");
+        AFloat num = AFloat.subtract(num1,num2);
         System.out.println(num.s);
 
     }
