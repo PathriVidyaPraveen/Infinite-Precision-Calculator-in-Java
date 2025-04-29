@@ -446,6 +446,10 @@ public class AFloat{
         AInteger result = AInteger.divide(numerator,denominator);
 
         String result_int = result.s;
+        while (result_int.length() <= 1000) {
+    result_int = "0" + result_int;
+}
+
         
         String result_float = result_int.substring(0,result_int.length()-1000) + "." + result_int.substring(result_int.length()-1000);
         result_float = remove_excess_zeroes_on_right(result_float);
@@ -457,10 +461,10 @@ public class AFloat{
 
     }
     public static void main(String[] args){
-        AFloat num1 = new AFloat("1.2");
-        AFloat num2 = new AFloat("200");
+        AFloat num1 = new AFloat("-1.2");
+        AFloat num2 = new AFloat("-200");
         AFloat num = AFloat.divide(num1,num2);
-        System.out.println(num.s);
+        System.out.println(num.sign + num.s);
 
     }
 }
