@@ -2,7 +2,6 @@ import subprocess
 import sys
 import os
 
-# Ensure correct usage
 if len(sys.argv) != 5:
     print("Usage: python run_myinfarith.py <int/float> <add/sub/mul/div> <num1> <num2>")
     sys.exit(1)
