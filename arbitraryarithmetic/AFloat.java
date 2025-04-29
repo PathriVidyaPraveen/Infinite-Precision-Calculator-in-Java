@@ -431,14 +431,14 @@ public class AFloat{
         }
 
 
-        String thousand_precision_maker = "1";
-        for(int i=0;i<1000;i++){
-            thousand_precision_maker += "0";
+        String thirty_precision_maker = "1";
+        for(int i=0;i<30;i++){
+            thirty_precision_maker += "0";
         }
 
         
 
-        a_int = (AInteger.multiply(new AInteger(a_int),new AInteger(thousand_precision_maker))).s;
+        a_int = (AInteger.multiply(new AInteger(a_int),new AInteger(thirty_precision_maker))).s;
 
         AInteger numerator = new AInteger(a_int);
         AInteger denominator = new AInteger(b_int);
@@ -446,12 +446,12 @@ public class AFloat{
         AInteger result = AInteger.divide(numerator,denominator);
 
         String result_int = result.s;
-        while (result_int.length() <= 1000) {
+        while (result_int.length() <= 30) {
     result_int = "0" + result_int;
 }
 
         
-        String result_float = result_int.substring(0,result_int.length()-1000) + "." + result_int.substring(result_int.length()-1000);
+        String result_float = result_int.substring(0,result_int.length()-30) + "." + result_int.substring(result_int.length()-30);
         result_float = remove_excess_zeroes_on_right(result_float);
         AFloat quotient = int_to_float(result_float);
         return quotient;
@@ -460,11 +460,5 @@ public class AFloat{
 
 
     }
-    public static void main(String[] args){
-        AFloat num1 = new AFloat("-1.2");
-        AFloat num2 = new AFloat("-200");
-        AFloat num = AFloat.divide(num1,num2);
-        System.out.println(num.sign + num.s);
 
-    }
 }

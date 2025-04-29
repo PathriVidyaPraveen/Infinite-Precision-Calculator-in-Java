@@ -349,7 +349,7 @@ public class AInteger{
         b = b.substring(begin_substr);
         try{
         if(b.equals("")){
-            throw new DivisionByZeroException("Division be zero error");
+            throw new DivisionByZeroException("Division by zero error");
 
         }
         }catch(DivisionByZeroException e){
@@ -400,14 +400,6 @@ public class AInteger{
 }
    
 
-    public static void main(String[] args){
-        AInteger num1 = new AInteger("8792726365283060579833950521677211");
-        AInteger num2 = new AInteger("0");
-        AInteger num = AInteger.divide(num1,num2);
-        String number = num.s;
-        System.out.println(number);
-
-    }
 
 
 }
