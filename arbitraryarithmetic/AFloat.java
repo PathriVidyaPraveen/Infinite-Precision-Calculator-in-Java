@@ -457,8 +457,8 @@ public class AFloat{
 
     }
     public static void main(String[] args){
-        AFloat num1 = new AFloat("5.5");
-        AFloat num2 = new AFloat("2");
+        AFloat num1 = new AFloat("1.2");
+        AFloat num2 = new AFloat("200");
         AFloat num = AFloat.divide(num1,num2);
         System.out.println(num.s);
 
