@@ -1,47 +1,42 @@
-# Import the subprocess module to run system commands like javac and java
-import subprocess
-# Import sys to access command-line arguments and exit the script on errors
-import sys
-# Import os to work with file paths in a platform-independent way
-import os
+import subprocess # run system commands like javac and java
+import sys # access command line arguments and exit the script on error
+import os # useful to work with file paths in a platfoorm independent way
 
-# Ensure the script receives exactly 4 arguments (excluding the script name)
+# Enchecks whether number of arguments is 4
 if len(sys.argv) != 5:
-    # Print usage instructions if the number of arguments is incorrect and exit the script
-    print("Usage: python run_myinfarith.py <int/float> <add/sub/mul/div> <num1> <num2>")
+    print("Invalid commands !!")
     sys.exit(1)
 
-# Get the absolute path of the directory containing this script
+# Get the absolute path of the directory containing this script and build a path to arbitraryarithmetic directory
 working_dir = os.path.dirname(os.path.abspath(__file__))
-# Build the path to the "arbitraryarithmetic" directory containing AInteger and AFloat
 path = os.path.join(working_dir, "arbitraryarithmetic")
 
 # Create the javac command to compile the required Java source files
 compile_cmd = [
     "javac",
-    os.path.join(path, "AInteger.java"),              # Path to AInteger.java
-    os.path.join(path, "AFloat.java"),                # Path to AFloat.java
-    os.path.join(working_dir, "MyInfArith.java")      # Path to the main class MyInfArith.java
+    os.path.join(path, "AInteger.java"),            
+    os.path.join(path, "AFloat.java"),               
+    os.path.join(working_dir, "MyInfArith.java")   
 ]
 
-# Try compiling the Java files
+# Compiles the java files
 try:
-    subprocess.run(compile_cmd, check=True)           # Run the compile command and raise an error if it fails
+    subprocess.run(compile_cmd, check=True)           
 except subprocess.CalledProcessError:
-    print("Compilation failed.")                      # Print error message on compilation failure
-    sys.exit(1)                                       # Exit with error
+    print("Compilation failed.")                      
+    sys.exit(1)                                       
 
 # Create the java command to run the compiled program with user arguments
 run_cmd = [
     "java",
-    "-cp", working_dir,                               # Set classpath to the working directory
-    "MyInfArith",                                     # The main class to run
-    sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4] # Pass the 4 command-line arguments to the Java program
+    "-cp", working_dir,                              
+    "MyInfArith",                                     
+    sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4] 
 ]
 
-# Try executing the Java program
+# execute the java command
 try:
-    subprocess.run(run_cmd, check=True)               # Run the Java program and raise an error if it fails
+    subprocess.run(run_cmd, check=True)               
 except subprocess.CalledProcessError:
-    print("Execution failed.")                        # Print error message on runtime failure
-    sys.exit(1)                                       # Exit with error
+    print("Execution failed.")                        
+    sys.exit(1)                                       
