@@ -1,20 +1,21 @@
 import arbitraryarithmetic.AInteger;
 import arbitraryarithmetic.AFloat;
+// Imports both the files and corresponding functions from AInteger.java and AFloat.java
 
 
 public class MyInfArith {
-
+    // checks if the number of arguments is exactly 4 or not
     public static void main(String[] args) {
         if (args.length != 4) {
             System.out.println("Invalid Input");
             return;
         }
-
+// As the input command is "java MyInfArith int add 123 234" , first argument is datatype ,s econd is operation and third and fourth are operands
         String datatype = args[0].toLowerCase();
         String operation = args[1];
         String num1 = args[2];
         String num2 = args[3];
-
+// calls the corresponding function by using switch cases to match each operand and then outputting desired result
         switch (datatype) {
             case "int":
                 AInteger int1 = new AInteger(num1);
@@ -100,6 +101,7 @@ public class MyInfArith {
                 break;
 
             default:
+                // this happens due to incorrect datatype.
                 System.out.println("Invalid data datatype. Please try again. Use only 'int' or 'float'");
         }
     }
