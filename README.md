@@ -1,6 +1,6 @@
 # CS1023-SDF-Java-Project
-This is a GitHub repo of Infinite Precision Calculator in Java.
+This is a GitHub repo of Infinite Precision Calculator in Java. The main goal of this project is to create an infinite or arbitrary precision Java calculator. It can handle both infinite length integers or floating point numbers and their corresponding arithmetic operations. Refer to project_report.pdf for more details.
 
-**Limitations**:
-1) Here I have assumed that for the constructor in AInteger and AFloat , 0 has a positive sign as a convention because I have been parsing every string and storing it in 2 values s which denotes magnitude and sign which denotes sign of the number. So 0 cannot have negative sign and may lead to errors.
+**Setup and Installation**
+
 
