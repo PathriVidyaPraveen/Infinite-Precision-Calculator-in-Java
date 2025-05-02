@@ -19,6 +19,8 @@ This is a GitHub repo of Infinite Precision Calculator in Java. The main goal of
 7) git tag -a <version_of_release> -m "Message"
 8) git push --tags
 9) git log --oneline --graph --decorate
+10) git pull origin main --rebase
+
 
 
 
