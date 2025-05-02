@@ -9,6 +9,16 @@ This is a GitHub repo of Infinite Precision Calculator in Java. The main goal of
 5) Python script automation for running the project
 6) Ant build system for running the project
 
-**Setup and Installation**
+**Git workflow**
+1) git init - Initializes the git in the WSL terminal.
+2) git branch -M main - Sets the branch as main branch.
+3) git remote add origin <link> -
+4) git add .
+5) git commit -m "Message"
+6) git push origin main
+7) git tag -a <version_of_release> -m "Message"
+8) git push --tags
+9) git log --oneline --graph --decorate
+
 
 
