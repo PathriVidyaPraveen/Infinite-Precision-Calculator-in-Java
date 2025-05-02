@@ -47,6 +47,18 @@ Creates a JAR file by packaging the class files
 1) script_java_project.py is a python script that is used for running the AInteger or AFloat methods.
 2) Usage : python3 script_java_project.py <int/float> <add/sub/mul/div> operand1 operand2
 
+**Ant**  
+1) Ant is a build tool for automating many tasks related to Java projects like compilation , running , creating JAR files etc.
+2) Ant installation guide in WSL or Ubuntu :
+   sudo apt update
+   sudo apt install ant
+   ant -version
+3) Running the project :
+   ant
+4) This runs the build.xml file and then compiles the AInteger and AFloat java files and creates class files , make a JAR file out of it and then store it in build folder.
+
+  
+
 
 
 
