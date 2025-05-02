@@ -43,6 +43,12 @@ Creates a JAR file by packaging the class files
 3) Running the file:
    java MyInfArith <int/float> <add/sub/mul/div> operand1 operand2
 
+**Python script automation**  
+1) script_java_project.py is a python script that is used for running the AInteger or AFloat methods.
+2) Usage : python3 script_java_project.py <int/float> <add/sub/mul/div> operand1 operand2
+
+
+
 
 
 
