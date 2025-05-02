@@ -21,6 +21,18 @@ This is a GitHub repo of Infinite Precision Calculator in Java. The main goal of
 9) git log --oneline --graph --decorate : Shows a visual and compact log of your commit history.
 10) git pull origin main --rebase : Fetches the latest changes from the remote main and rebases your local changes on top of them.It avoids messy merge commits and keeps history clean.
 
+**JAR File**
+A JAR (Java ARchive) file is a packaged and compressed collection of .class files, metadata, and resources (like images or text files), bundled into a single file.It’s like a ZIP file for Java programs — useful for running, sharing, or deploying Java applications.
+1) javac arbitraryarithmetic/AInteger.java arbitraryarithmetic/AFloat.java
+Compile the java files
+2) jar cf arbitraryarithmetic/aarithmetic.jar -C arbitraryarithmetic AInteger.class AFloat.class
+Creates a JAR file by packaging the class files
+3) To use the JAR in another Java file (like MyInfArith.java), compile and run like this:
+   javac -cp .:arbitraryarithmetic/aarithmetic.jar MyInfArith.java
+   java -cp .:arbitraryarithmetic/aarithmetic.jar MyInfArith int add 123 456
+
+
+
 
 
 
