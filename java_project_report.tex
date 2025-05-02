@@ -1,0 +1,331 @@
+\documentclass{article}
+\usepackage{tikz}
+\usepackage{tikz-uml}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{fancyhdr}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Arbitrary Precision Arithmetic Library}
+\author{Pathri Vidya Praveen - CS24BTECH11047}
+\date{\today}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Arbitrary Precision Arithmetic}
+\lhead{Project Report}
+\rfoot{Page \thepage}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\newpage
+
+\section{Design Overview}
+
+This project focusses on implementation of an  infinite/arbitrary-precision arithmetic library in Java using OOP concepts. Given two strings as input, you need to add support for addition, subtraction, multiplication and division, for both integer and float data types. The answer should be printed on the terminal screen.\\
+Using these classes, one should be able to compute any expression involving arbitrarily large integers and arbitrarily large floating point precision numbers with arbitrary precision. \\
+All the operations that you implement should preserve the complete information of the number and should not introduce any kind of round-off errors.\\
+The actual decimal precision may vary depending on how your MyInfArith handles decimal scale/rounding, we will follow Java’s BigDecimal class and truncate at 30 decimal digits.\\
+
+\subsection{UML Class Diagram}
+\begin{tikzpicture}
+  \umlclass[x=0,y=0]{AInteger}{
+    - s : String \\
+    - sign : char
+  }{
+    + AInteger() \\
+    + AInteger(String) \\
+    + AInteger(AInteger) \\
+    + parse(String s) : AInteger \\
+    + compare(String , String) : boolean \\
+    + string\_subtract(String , String) : String \\
+    
+    + add(AInteger, AInteger) : AInteger \\
+    + subtract(AInteger, AInteger) : AInteger \\
+    + multiply(AInteger, AInteger) : AInteger \\
+    + divide(AInteger, AInteger) : AInteger
+  }
+
+  \umlclass[x=8,y=0]{AFloat}{
+    - s : String \\
+    - sign : char
+  }{
+    + AFloat() \\
+    + AFloat(String) \\
+    + AFloat(AFloat) \\
+    + parse(String) : AFloat \\
+    + int\_to\_float(String) : AFloat \\
+    + pad\_left\_zeroes(String , int) : String \\
+    + pad\_right\_zeroes(String , int) : STring \\
+    + add(AFloat, AFloat) : AFloat \\
+    + subtract(AFloat, AFloat) : AFloat \\
+    + remove\_excess\_zeroes\_on\_right(String) : String \\
+    + multiply(AFloat, AFloat) : AFloat \\
+    + divide(AFloat, AFloat) : AFloat
+  }
+\end{tikzpicture}
+
+
+\section{AInteger Class}
+\begin{itemize}
+    \item \textbf{Public Fields:}
+    \begin{itemize}
+        \item \texttt{public String s} \\
+        Stores the digits of the arbitrary-length integer in string form.
+
+        \item \texttt{public char sign} \\
+        Stores the sign of the integer. Either '+' or '-'. Zero is considered positive.
+    \end{itemize}
+
+    \item \textbf{Constructors:}
+    \begin{itemize}
+        \item \texttt{AInteger()} \\
+        Default constructor. Initializes the number to 0 with a positive sign.
+
+        \item \texttt{AInteger(String s)} \\
+        Initializes an instance from a string. Validates that the string is non-null, non-empty, and contains only digits (optionally preceded by '+' or '-').
+
+        \item \texttt{AInteger(AInteger other\_copy)} \\
+        Copy constructor. Creates a deep copy of another AInteger instance.
+    \end{itemize}
+
+    \item \textbf{Static Method:}
+    \begin{itemize}
+        \item \texttt{static AInteger parse(String s)} \\
+        Parses a string and returns a new AInteger instance from it.
+    \end{itemize}
+\end{itemize}
+
+
+\begin{itemize}
+    \item \texttt{static AInteger add(AInteger s1, AInteger s2)}:
+    \begin{itemize}
+        \item Handles all sign cases:
+        \begin{itemize}
+            \item \texttt{(+)} + \texttt{(+)}: Direct digit-wise addition.
+            \item \texttt{(+)} + \texttt{(-)}: Converts to subtraction.
+            \item \texttt{(-)} + \texttt{(+)}: Converts to subtraction.
+            \item \texttt{(-)} + \texttt{(-)}: Adds magnitudes and keeps negative sign.
+        \end{itemize}
+        \item Performs manual digit-by-digit addition from right to left using carry.
+        \item Removes leading zeroes from result.
+    \end{itemize}
+\end{itemize}
+
+
+\begin{itemize}
+    \item \texttt{static boolean compare(String a, String b)}:
+    \begin{itemize}
+        \item Compares two positive numeric strings.
+        \item Returns \texttt{true} if \texttt{a > b}, else \texttt{false}.
+    \end{itemize}
+\end{itemize}
+
+
+\begin{itemize}
+    \item \texttt{static String string\_subtract(String a, String b)}:
+    \begin{itemize}
+        \item Assumes \texttt{a >= b}, and both are positive.
+        \item Performs digit-wise subtraction from right to left using borrow.
+    \end{itemize}
+\end{itemize}
+
+
+\begin{itemize}
+    \item \texttt{static AInteger subtract(AInteger s1, AInteger s2)}:
+    \begin{itemize}
+        \item Handles all sign combinations:
+        \begin{itemize}
+            \item \texttt{(+)} - \texttt{(+)}: Uses magnitude comparison.
+            \item \texttt{(-)} - \texttt{(+)}: Converts to addition, keeps sign.
+            \item \texttt{(+)} - \texttt{(-)}: Converts to addition.
+            \item \texttt{(-)} - \texttt{(-)}: Converts to \texttt{b - a}.
+        \end{itemize}
+        \item Uses \texttt{compare()} to determine magnitude.
+        \item Uses \texttt{string\_subtract()} accordingly.
+    \end{itemize}
+\end{itemize}
+
+
+\begin{itemize}
+    \item \texttt{static AInteger multiply(AInteger s1, AInteger s2)}:
+    \begin{itemize}
+        \item Handles all sign combinations.
+        \item Uses long multiplication (school method).
+        \item For each digit in the second number (from right), multiplies with full first number by repeated addition.
+        \item Appends necessary zeros (like multiplying by powers of 10).
+        \item Accumulates all partial products using \texttt{add()}.
+    \end{itemize}
+\end{itemize}
+
+
+\begin{itemize}
+    \item \texttt{class DivisionByZeroException extends ArithmeticException}:
+    \begin{itemize}
+        \item Custom exception thrown when division by zero is attempted.
+        \item Overrides constructor to give a clear message.
+    \end{itemize}
+\end{itemize}
+
+\begin{itemize}
+    \item \texttt{static AInteger divide(AInteger s1, AInteger s2)}:
+    \begin{itemize}
+        \item Handles all sign combinations.
+        \item Uses long division (school method).
+        \item While division by dividend with divisor , it takes digit by digit while division and then divides the remainder with divisor and add the quotient to the result quotient and then add the next digit to the remainder and continue the process until you are left with remainder less than divisor
+    \end{itemize}
+\end{itemize}
+
+
+\section{AFloat class}
+\begin{itemize}
+    \item \textbf{Public Fields:}
+    \begin{itemize}
+        \item \texttt{public String s} \\
+        Stores the digits of the arbitrary-length floating point in string form.
+
+        \item \texttt{public char sign} \\
+        Stores the sign of the integer. Either '+' or '-'. Zero is considered positive.
+    \end{itemize}
+
+    \item \textbf{Constructors:}
+    \begin{itemize}
+        \item \texttt{AFloat()} \\
+        Default constructor. Initializes the number to 0.0 with a positive sign.
+
+        \item \texttt{AFloat(String s)} \\
+        Initializes an instance from a string. Validates that the string is non-null, non-empty, and contains only digits and atmost one decimal point (optionally preceded by '+' or '-').
+
+        \item \texttt{AFloat(AFloat other\_copy)} \\
+        Copy constructor. Creates a deep copy of another AFloat instance.
+    \end{itemize}
+
+\item \textbf{Static Method:}
+    \begin{itemize}
+        \item \texttt{static AFloat parse(String s)} \\
+        Parses a string and returns a new AFloat instance from it.
+    \end{itemize}
+\end{itemize}
+
+
+\begin{itemize}
+    \item \texttt{static AFloat add(AFloat s1, AFloat s2)}:
+    \begin{itemize}
+        \item First remove the decimal point from both the strings.
+        \item Then perform addition using AInteger addition
+        \item The add the decimal point in the appropriate location
+    \end{itemize}
+\end{itemize}
+
+
+
+\begin{itemize}
+    \item \texttt{static AFloat subtract(AFloat s1, AFloat s2)}:
+    \begin{itemize}
+    \item Remove the decimal point from the strings
+    \item Then do the normal AInteger subtraction
+    \item Then finally place the decimal point back into the final result string in the appropriate position.
+    \end{itemize}
+\end{itemize}
+
+
+\begin{itemize}
+    \item \texttt{static AFloat multiply(AFloat s1, AFloat s2)}:
+    \begin{itemize}
+    \item Remove the decimal point from both the strings and then do the normal AInteger multiplication and finally place the decimal point back into the final result string.
+    \end{itemize}
+\end{itemize}
+
+
+\begin{itemize}
+    \item \texttt{class DivisionByZeroException extends ArithmeticException}:
+    \begin{itemize}
+        \item Custom exception thrown when division by zero is attempted.
+        \item Overrides constructor to give a clear message.
+    \end{itemize}
+\end{itemize}
+
+\begin{itemize}
+    \item \texttt{static AFloat divide(AFloat s1, AFloat s2)}:
+    \begin{itemize}
+    \item Handles the exception when the denominator is zero and cases when numerator is zero or numerator is equal to denominator.
+    \item Remove the decimal points from both the numerator and denominator and then multiply the numerator with $10^{30}$ and then do AInteger division and then finally place the decimal point back in the final result string and then output it.
+    
+    \end{itemize}
+\end{itemize}
+
+\begin{itemize}
+    \item \texttt{AFloat int\_to\_float(String s)}:
+    \begin{itemize}
+    \item Converts an integer to floating point number by adding a .0 at the end of the number and return AFloat object. 
+    \end{itemize}
+\end{itemize}
+
+\begin{itemize}
+    \item \texttt{String pad\_left\_zeroes(String s,int n)}:
+    \begin{itemize}
+    \item pads n number of zeroes to the left of string S 
+    \end{itemize}
+\end{itemize}
+
+
+\begin{itemize}
+    \item \texttt{String pad\_right\_zeroes(String s,int n)}:
+    \begin{itemize}
+    \item pads n number of zeroes to the right of string s 
+    \end{itemize}
+\end{itemize}
+
+
+\begin{itemize}
+    \item \texttt{String remove\_excess\_zeroes\_on\_right(String s)}:
+    \begin{itemize}
+    \item Removes excess zeroes on the right of a String 
+    \end{itemize}
+\end{itemize}
+
+
+
+
+\section{Limitations}
+\begin{itemize}
+  \item The library handles only base-10 string input.
+  \item Performance is not optimized (e.g., multiplication is O(n\textsuperscript{2})).
+  \item No exception hierarchy for user-defined overflow/underflow.
+  \item This is a completely brute force approach not following any optimized algorithms. So this can be a good improvement in future.
+  \item In the code , 0 in AInteger and 0.0 in AFloat are considered as positive by default because I am handling both magnitude and sign differently in 2 public variables. So this may lead to some errors if input is given like -0 or -0.0 .
+  \item The Strings may not be taken of infinite length due to memory constraints of the machine. So it may fail if very very large numbers are given as input due to less memory to store such large strings. Also for numbers of order $10^{{10}^{8}}$ , time taken to run the code may increase.
+  
+\end{itemize}
+
+\section{Verification Approach}
+All major operations were tested with:
+\begin{itemize}
+  \item Test cases given in the problem statement. 
+  \item Randomized inputs
+  \item Edge cases like zero, negative numbers, and large-length inputs
+  \item For float division , initially I came across some bugs for 1.2 / 200. Then I rectified the obtained index out of bound exception as my code needs to be updated the final result string to same length as that of number for keeping the decimal place back. 
+  \item Tested for numbers of different sign combinations and different lengths , numbers of very large difference in magnitude.
+  
+\end{itemize}
+
+\section{Key Learnings}
+\begin{itemize}
+  \item Low-level implementation of arithmetic operations.
+  \item Importance of string manipulation and zero-padding in arbitrary-precision arithmetic.
+  \item Debugging complex string-based number algorithms.
+  \item Gained more conceptual clarity over encapsulation and other OOP concepts.
+  \item Gained a good hands on experience with python script automation , git usage , docker image creation and usage of build systems like Ant.
+\end{itemize}
+
+\section{Library Usage and README}
+\begin{itemize}
+    \item Refer to README.md file for more details.
+\end{itemize}
+
+\end{document}
