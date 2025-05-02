@@ -41,7 +41,7 @@ Creates a JAR file by packaging the class files
 1) This is a Java file for importing and running both the arbitraryarithemtic/AInteger.java and arbitraryarithmetic/AFloat.java by taking the command line arguments and then outputting the result by running in CLI.
 2) Compilation : javac MyInfArith.java
 3) Running the file:
-   java MyInfArith <int/float> <add/sub/mul/div> <operand1> <operand2>
+   java MyInfArith <int/float> <add/sub/mul/div> operand1 operand2
 
 
 
