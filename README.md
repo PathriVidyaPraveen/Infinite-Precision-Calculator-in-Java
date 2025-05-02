@@ -57,6 +57,10 @@ Creates a JAR file by packaging the class files
    ant
 4) This runs the build.xml file and then compiles the AInteger and AFloat java files and creates class files , make a JAR file out of it and then store it in build folder.
 
+**Docker**  
+1) Docker is a tool which can be used for containerisation , creating or building a docker image which can be further used for deployment. Dockerfile contains all the necessary instructions for creating a docker image. Install docker using Docker hub - docker desktop. Now in the WSL working directory , use "docker login" to login to the docker (WSL2 Integration enabling makes it possible) , then use "docker build -t username/appname" for building a docker image with the provided dockerfile instructions and the run the docker container obtained from the image with the following command "docker run int add 123 234". For pushing the built docker image into the docker hub , use the following command "docker push username/appname".
+
+
   
 
 
