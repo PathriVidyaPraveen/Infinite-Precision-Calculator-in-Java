@@ -1,4 +1,19 @@
-* d2c0cca (HEAD -> main, origin/main) Implemented Float Division. Completed all the necessary operations for AInteger and AFloat classes
+* 4a231a6 (HEAD -> main, origin/main) Added LaTeX files
+* c46d7c9 (tag: v5.0) Added dockerfile and created a docker image
+* 4f80666 Added build.xml ant file
+* 398c1b7 (tag: v4.0) Added final jar file
+* e1fb5b7 Added commenst for AFloat.java
+* b411282 Added comments for AInteger.java
+* dec3fd4 Added comments for MyInfArith.java
+* a7db4a4 Added comments for python script file
+* 5e95157 (tag: v3.0) Added jar file in arbitraryarithmetic so that it can be used as a library
+* 7918920 Added python script for compiling and running project
+* 0fdfd80 Added python script for compiling and running project
+* 3b68d59 Made some minor changes to make the code capable of running with automation scripts and also added MyInfArith.java and MyInfArith.class files
+* d2e3c15 Resolved a minor bug in float division
+* 4d090b5 Resuming project
+* a12827d (tag: v2.0) Snapshot of all git commits upto now added in git_commits.txt
+* d2c0cca Implemented Float Division. Completed all the necessary operations for AInteger and AFloat classes
 * 1857902 Implemented float multiplication
 * 7f40b8a Implemented AFloat subtraction
 * 53df894 Packaged AInteger and AFloat into arbitraryarithmetic and also implemented AFloat addition
